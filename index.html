@@ -25,18 +25,18 @@
           </button>
           <a class='navbar-brand' href='index.html'>Nextt Careworker Searchable Map</a>
         </div>
-        <div class="navbar-collapse collapse">
+      <!--  <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
             <li class='active'><a href="index.html">Map</a></li>
             <li><a href="about.html">About</a></li>
           </ul>
-        </div><!--/.nav-collapse -->
+        </div>/.nav-collapse -->
       </div>
     </div>
     <div class='container-fluid'>
       <div class='row'>
         <div class='col-md-4'>
-          <p>This is a  searchable map based on Care Worker locations. please search your client below and choose a search area</p>
+          <p>This is a  searchable map based on Care Worker locations. </br>Please search your clients address. </br> Don't Forget to choose a search area (within:) to get results</p>
           <div class='well'>
             <h4>
               Address <small>(<a id='find_me' href='#'>Client location</a>)</small>
@@ -46,29 +46,56 @@
             </p>
             <p>
               <label>
-                within
+                within:
                 <select id='search_radius'>
-                  <option value='805'>4 blocks</option>
-                  <option value='1610'>2 kilometre</option>
-                  <option value='8050'>10 Kilometers</option>
-                  <option value='40250'>50 kilometers</option>
+                  <option value='805'>1 KM</option>
+                  <option value='1610'>2 KM</option>
+                  <option value='8050'>10 KM</option>
+                  <option value='16100'>20 KM</option>
+                  <option value='40250'>50 KM</option>
                 </select>
               </label>
             </p>
 
             <br />
-            <h4>Custom filters and views</h4>
-            <p>Take a look at the <a href='https://github.com/derekeder/FusionTable-Map-Template/wiki/Filter-examples'>wiki</a> to see how to add your own custom filters and views like:</p>
-            <div class='row'>
-              <div class='col-md-6'>
-                <ul>
-                  <li><a href='https://github.com/derekeder/FusionTable-Map-Template/wiki/Filter-examples#wiki-checkboxes'>Checkboxes</a></li>
-                  <li><a href='https://github.com/derekeder/FusionTable-Map-Template/wiki/Filter-examples#wiki-radiobuttons'>Radio buttons</a></li>
-                  <li><a href='https://github.com/derekeder/FusionTable-Map-Template/wiki/Filter-examples#wiki-drop-down-lists'>Drop down lists</a></li>
+              <h4>Services</h4>
+              <ul class='inputs-list unstyled'>
+                <li>
+                  <label class='checkbox inline'>
+                      <input type='checkbox' id='cbType1' />
+                        <span class='filter-box filter-green'></span>
+                      Home Care </label>
+                  </li>
+                  <li>
+                    <label class='checkbox inline'>
+                      <input type='checkbox' id='cbType2' />
+                        <span class='filter-box filter-blue'></span>
+                      Personal Care
+                    </label>
+                  </li>
+                  <li>
+                    <label class='checkbox inline'>
+                      <input type='checkbox' id='cbType3' />
+                      <span class='filter-box filter-red'></span>
+                    Respite
+                    </label>
+                  </li>
+                  <li>
+                    <label class='checkbox inline'>
+                      <input type='checkbox' id='cbType4' />
+                      <span class='filter-box filter-purple'></span>
+                    Community Support
+                    </label>
+                  </li>
+                  <li>
+                    <label class='checkbox inline'>
+                      <input type='checkbox' id='cbType5' />
+                      <span class='filter-box filter-yellow'></span>
+                    Nursing
+                    </label>
+                  </li>
                 </ul>
-              </div>
-            </div>
-            <br />
+              <br />
             <a class='btn btn-primary' id='search' href='#'>
               <i class='glyphicon glyphicon-search'></i>
               Search
@@ -80,6 +107,7 @@
           </div>
           <div class='alert alert-info' id='result_box' ><strong id='result_count'></strong></div>
         </div>
+
         <div class='col-md-8'>
           <noscript>
             <div class='alert alert-info'>
@@ -87,9 +115,8 @@
               <p>Please enable JavaScript to view the map.</p>
             </div>
           </noscript>
-          <div id='map_canvas'></div>
+        <div id='map_canvas'></div>
           <p class='pull-right'>
-            <a href='http://derekeder.com/searchable_map_template/'>Searchable Map Template</a> by <a href='http://derekeder.com'>Derek Eder</a>.
         </p>
         </div>
       </div>
@@ -111,12 +138,11 @@
 
         $(function() {
           var myMap = new MapsLib({
-            fusionTableId:      "1TyJHyYhstRVz6tRZrwVb7eZAdI-RWiqXLuQ-VnHR",
-            googleApiKey:       "AIzaSyBkgKmaps2l3pxN-VNPs_4V4xOfmY0KayCmM2s",
-            locationColumn:     "CareWorkerAddress",
+            fusionTableId:      "1poD4gSZNPPw9SHh3g8TfCzxNW7VvBSWH2htfk99j",
+            googleApiKey:       "AIzaSyBkgK2l3pxN-VNPs_4V4xOfmY0KayCmM2s",
+            locationColumn:     "'Address Suburb and Postcode'",
             map_center:         [-33.0120022, 146.1730953],
             locationScope:      "Australia"
-            defaultZoom:        "7"
           });
 
           var autocomplete = new google.maps.places.Autocomplete(document.getElementById('search_address'));

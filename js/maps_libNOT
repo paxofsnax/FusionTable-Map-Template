@@ -21,10 +21,10 @@
         this.locationColumn = options.locationColumn || "";
 
         // appends to all address searches if not present
-        this.locationScope = options.locationScope || "Australia";
+        this.locationScope = options.locationScope || "";
 
         // zoom level when map is loaded (bigger is more zoomed in)
-        this.defaultZoom = options.defaultZoom || 6;
+        this.defaultZoom = options.defaultZoom || "";
 
         // center that your map defaults to
         this.map_centroid = new google.maps.LatLng(options.map_center[0], options.map_center[1]);
@@ -46,6 +46,14 @@
             zoom: this.defaultZoom,
             center: this.map_centroid,
             mapTypeId: google.maps.MapTypeId.ROADMAP
+            styles: [
+              {
+                stylers: [
+                  { saturation: -40 }, // MODIFY Saturation and Lightness if needed
+                  { lightness: 20 }     // Current values make thematic polygon shading stand out over base map
+                ]
+              }
+            ]
         };
         this.geocoder = new google.maps.Geocoder();
         this.map = new google.maps.Map($("#map_canvas")[0], this.myOptions);
@@ -70,10 +78,7 @@
         $(":checkbox").prop("checked", "checked");
         $("#result_box").hide();
 
-
-
         //-----custom initializers-----
-
         //-----end of custom initializers-----
 
         //run the default search when page loads
@@ -101,9 +106,8 @@
         });
         self.fusionTable = self.searchrecords;
         self.searchrecords.setMap(map);
-        self.getList(whereClause);
         self.getCount(whereClause);
-
+        self.getList(whereClause);
     };
 
 
@@ -168,21 +172,6 @@
         self.whereClause = self.locationColumn + " not equal to ''";
 
         //-----custom filters-----
-      //  var type_column = "'Service TYPE'";
-      //  if ( $("#rbType1").is(':checked')) self.whereClause += " AND " + type_column + "=1";
-      //  if ( $("#rbType2").is(':checked')) self.whereClause += " AND " + type_column + "=2";
-      //  if ( $("#rbType3").is(':checked')) self.whereClause += " AND " + type_column + "=3";
-
-        var type_column = "'Service TYPE'";
-        var tempWhereClause = [];
-        if ( $("#cbType1").is(':checked')) tempWhereClause.push("1");
-        if ( $("#cbType2").is(':checked')) tempWhereClause.push("2");
-        if ( $("#cbType3").is(':checked')) tempWhereClause.push("3");
-        if ( $("#cbType4").is(':checked')) tempWhereClause.push("4");
-        if ( $("#cbType5").is(':checked')) tempWhereClause.push("6");
-
-        self.whereClause += " AND " + type_column + " IN ('" + tempWhereClause.join("','") + "')";
-
         //-----end of custom filters-----
 
         self.getgeoCondition(address, function (geoCondition) {
@@ -318,49 +307,62 @@
         });
         $("#result_box").fadeIn();
     };
-
     MapsLib.prototype.getList = function(whereClause) {
-    var self = this;
-    var selectColumns = "'First Name', 'Last Name', 'Address Suburb and Postcode', 'Service Name', 'Service TYPE'" ;
+        var self = this;
+        var selectColumns = 'name, address, hours, recyclables ';
 
-    self.query({
-      select: selectColumns,
-      where: whereClause
-    }, function(json) {
-      self.displayList(json);
-    });
-  }
+        self.query({
+          select: selectColumns,
+          where: whereClause
+        }, function(response) {
+          self.displayList(response);
+        });
+      },
 
-  MapsLib.prototype.displayList = function (json) {
-    var self = this;
+      MapsLib.prototype.displayList = function(json) {
+        var self = this;
 
-    var data = json['rows'];
-    var template = '';
+        var data = json['rows'];
+        var template = '';
 
-    var results = $('#results_list');
-    results.hide().empty(); //hide the existing list and empty it out first
+        var results = $('#results_list');
+        results.hide().empty(); //hide the existing list and empty it out first
 
-    if (data == null) {
-      //clear results list
-      results.append("<li><span class='lead'>No results found</span></li>");
-    }
-    else {
-      for (var row in data) {
-        template = "\
-          <div class='row-fluid item-list'>\
-            <div class='span12'>\
-              " + data[row][2] + "\
-              <br />\
-              " + data[row][3] + "\
-              <br />\
-              " + data[row][4] + "\
-            </div>\
-          </div>";
-        results.append(template);
-      }
-    }
-    results.fadeIn();
-  }
+        if (data == null) {
+          //clear results list
+          results.append("<li><span class='lead'>No results found</span></li>");
+        }
+        else {
+          for (var row in data) {
+            template = "\
+              <div class='row-fluid item-list'>\
+                <div class='span12'>\
+                  <strong>" + data[row][0] + "</strong>\
+                  <br />\
+                  " + data[row][1] + "\
+                  <br />\
+                  " + data[row][2] + "\
+                  <br />\
+                  " + data[row][3] + "\
+                  <br />\
+                  " + data[row][4] + "\
+                  <br />\
+                  " + data[row][5] + "\
+                  <br />\
+                  " + data[row][6] + "\
+                  <br />\
+                  " + data[row][7] + "\
+                  <br />\
+                  " + data[row][8] + "\
+                  <br />\
+                  " + data[row][9] + "\
+                </div>\
+              </div>";
+            results.append(template);
+          }
+        }
+        results.fadeIn();
+      },
 
     MapsLib.prototype.addCommas = function (nStr) {
         nStr += '';
